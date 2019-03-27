@@ -11,6 +11,7 @@ package org.mcalvot.formacion.HandlingFormSubmission_2;
         import java.awt.*;
         import java.util.ArrayList;
         import java.util.List;
+        import java.util.Optional;
 
 @Controller
 public class FormularioController {
@@ -36,13 +37,42 @@ public class FormularioController {
         formul.setNombre(form.getNombre());
         formul.setApellido(form.getApellido());
         userRepository.save(formul);
-        return "info";
-    }
-
-    @RequestMapping("/users")
-    public String listaUsers(Model model) {
         model.addAttribute("listaUsers", userRepository.findAll());
         return "info";
     }
+
+    @GetMapping(path="/usuario/all")
+    public @ResponseBody Iterable<Formulario> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+
+//@RequestMapping(method=RequestMethod.DELETE, value="{idOferta}")
+
+    //eliminar un usuario
+    @GetMapping(path="/user/borrar/{id}")
+    public @ResponseBody String deleteUser (@PathVariable("id") Integer id) {
+
+        //model.addAttribute("borrarEl", userRepository.findById(id));
+        userRepository.deleteById(id);
+        log.info("Invocado eliminar usuario con id"+id);
+
+        return "userdelete";
+    }
+
+    @GetMapping(path="/user/modificar/{id}")
+    public @ResponseBody String updateUser(@PathVariable("id") Integer id, Model model, Formulario formu){
+
+      Formulario form = userRepository.findAllById(id);
+      model.addAttribute("UserUpdate", form);
+
+      form.setId(formu.getId());
+      form.setNombre(formu.getNombre());
+      form.setApellido(formu.getApellido());
+      userRepository.save(form);
+
+      return "update";
+    }
+
 
 }

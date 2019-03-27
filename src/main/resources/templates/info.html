@@ -7,29 +7,28 @@
 </head>
 <body>
 <h1>Result</h1>
-<table action="#" th:action="@{/formulario}" th:object="${form}" method="get">
+<table border="1px">
     <tr>
         <th>ID</th>
         <th>Nombre</th>
         <th>Apellido</th>
     </tr>
-    <forEach var="users"
-               items="${allUser}"
-               varStatus="status">
-        <tr>
-            <td><b>${status.index + 1}</b></td>
-            <td>${users.nombre}</td>
-            <td>${users.apellido}</td>
-        </tr>
-    </forEach>
 
+    <tr th:each="formulario: ${listaUsers}">
+        <td th:text="${formulario.id}" />
+        <td th:text="${formulario.nombre}" />
+        <td th:text="${formulario.apellido}" />
+
+        <td><a th:href="@{/user/borrar/} + ${formulario.id}" th:text="'Eliminar'"></a></td>
+        <td><a th:href="@{/user/modificar/} + ${formulario.id}" th:text="'Modificar'"></a></td>
+
+    </tr>
+
+
+       <!-- <td><a th:href="@{/user/borrar/{id}} + ${formulario.id}" th:text="'Eliminar'" ></a></td>
+    </tr>-->
 </table>
 
 <a href="/formulario">Volver</a>
-<!--<p th:text="'id: ' + ${Formulario.id}" />
-<p th:text="'nombre: ' + ${Formulario.nombre}" />
-<p th:text="'apellido: ' + ${Formulario.apellido}" />
-<a href="/formulario">Volver</a>-->
-
 </body>
 </html>

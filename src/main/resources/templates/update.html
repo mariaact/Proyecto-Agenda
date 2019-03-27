@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+    <title>Update</title>
+</head>
+<body>
+
+<form action="#" th:action="@{/user/modificar/{id}}" th:object="${UserUpdate}" method="post">
+    <p>Id: <input type="text" th:field="*{id}" /></p>
+    <p>nombre: <input type="text" th:field="*{nombre}" /></p>
+    <p>apellido: <input type="text" th:field="*{apellido}" /></p>
+
+
+    <tr th:each="formulario: ${listaUsers}">
+        <td th:text="${formulario.id}" />
+        <td th:text="${formulario.nombre}" />
+        <td th:text="${formulario.apellido}" />
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+
+</body>
+</html>
