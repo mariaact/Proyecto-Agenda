@@ -6,4 +6,5 @@ public interface UserRepository extends CrudRepository<Formulario, Integer> {
 
 
     Formulario findAllById(int i);
+
 }

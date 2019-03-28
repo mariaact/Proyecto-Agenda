@@ -20,13 +20,11 @@
         <td th:text="${formulario.apellido}" />
 
         <td><a th:href="@{/user/borrar/} + ${formulario.id}" th:text="'Eliminar'"></a></td>
-        <td><a th:href="@{/user/modificar/} + ${formulario.id}" th:text="'Modificar'"></a></td>
+        <!--<td><a href="/update">Modificar</a></td>-->
+        <td><a th:href="@{/user/modificar/} + ${formulario.id}" th:text="'update'"></a></td>
 
     </tr>
 
-
-       <!-- <td><a th:href="@{/user/borrar/{id}} + ${formulario.id}" th:text="'Eliminar'" ></a></td>
-    </tr>-->
 </table>
 
 <a href="/formulario">Volver</a>

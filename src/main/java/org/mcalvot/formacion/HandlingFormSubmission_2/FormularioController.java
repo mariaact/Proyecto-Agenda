@@ -6,12 +6,6 @@ package org.mcalvot.formacion.HandlingFormSubmission_2;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
         import org.springframework.web.bind.annotation.*;
-        import org.thymeleaf.context.WebContext;
-
-        import java.awt.*;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Optional;
 
 @Controller
 public class FormularioController {
@@ -24,7 +18,6 @@ public class FormularioController {
     @GetMapping("/formulario")
     public String greetingForm(Model model) {
         model.addAttribute("form", new Formulario());
-        //List<Formulario> allUser = (List<Formulario>) userRepository.findAll();
 
         return "formulario";
     }
@@ -47,32 +40,61 @@ public class FormularioController {
     }
 
 
-//@RequestMapping(method=RequestMethod.DELETE, value="{idOferta}")
-
     //eliminar un usuario
-    @GetMapping(path="/user/borrar/{id}")
+    @GetMapping("user/borrar/{id}")
     public @ResponseBody String deleteUser (@PathVariable("id") Integer id) {
-
+        //Formulario form  = userRepository.findAllById(id);
         //model.addAttribute("borrarEl", userRepository.findById(id));
         userRepository.deleteById(id);
         log.info("Invocado eliminar usuario con id"+id);
 
-        return "userdelete";
+        //return "<a href=\"/info\">VOLVER</a>";
+        return "Usuario Eliminado";
     }
 
-    @GetMapping(path="/user/modificar/{id}")
-    public @ResponseBody String updateUser(@PathVariable("id") Integer id, Model model, Formulario formu){
+    /*@GetMapping(path="/user/modificar")
+    public @ResponseBody String updateUser(){
 
-      Formulario form = userRepository.findAllById(id);
+     /* Formulario form = userRepository.findAllById(id);
       model.addAttribute("UserUpdate", form);
 
-      form.setId(formu.getId());
-      form.setNombre(formu.getNombre());
-      form.setApellido(formu.getApellido());
-      userRepository.save(form);
+      formu.setId(form.getId());
+      formu.setNombre(form.getNombre());
+      formu.setApellido(form.getApellido());
+      userRepository.save(formu);
 
-      return "update";
+      return "modificaruser";
+    }*/
+
+    @GetMapping("/update")
+    public String update() {
+
+        return "update";
     }
+
+    @GetMapping("/user/modificar/{id}")
+    public String userGetUpdate(Model modelo) {
+        modelo.addAttribute("userUpdateGET", new Formulario());
+       // log.info("UsuarioUpdate: --> " + form.getId() + form.getApellido() + form.getNombre());
+        log.info("Estoy en el metodo GET ");
+        return "update";
+    }
+
+
+    @PostMapping("/user/modificar/{id}")
+    public String userPostUpdate(@ModelAttribute Formulario form,Model modelo) {
+        //Formulario form = new Formulario();
+        log.info("Estoy en el metodo POST");
+        modelo.addAttribute("userUpdatePOST", form);
+        log.info("UsuarioUpdatePOST: --> " + form.getId() + form.getApellido() + form.getNombre());
+        Formulario userUpdate = userRepository.findAllById(form.getId());
+        userUpdate.setNombre(form.getNombre());
+        userUpdate.setApellido(form.getApellido());
+        userRepository.save(userUpdate);
+
+        return "User Modificado";
+    }
+
 
 
 }
