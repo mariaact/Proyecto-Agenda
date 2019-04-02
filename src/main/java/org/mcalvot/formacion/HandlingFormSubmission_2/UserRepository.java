@@ -2,9 +2,9 @@ package org.mcalvot.formacion.HandlingFormSubmission_2;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<Formulario, Integer> {
+public interface UserRepository extends CrudRepository<FormularioUsuario, Integer> {
 
 
-    Formulario findAllById(int i);
+    FormularioUsuario findAllById(Integer i);
 
 }

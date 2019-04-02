@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle Usario</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Detalle del Usuario</h1>
+
+<p th:text=" 'id:  ' + ${datosUser.id}"></p>
+<p th:text=" 'Nombre:  ' + ${datosUser.nombre}"></p>
+<p th:text=" 'Apellido:  ' + ${datosUser.apellido}"></p>
+
+<a href="/mostrarDatos">Mostrar la informacion de todos los ususarios</a>
+
+</body>
+</html>

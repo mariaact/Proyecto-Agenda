@@ -14,14 +14,15 @@
         <th>Apellido</th>
     </tr>
 
-    <tr th:each="formulario: ${listaUsers}">
-        <td th:text="${formulario.id}" />
-        <td th:text="${formulario.nombre}" />
-        <td th:text="${formulario.apellido}" />
+    <tr th:each="user: ${listaUsers}">
+        <td th:text="${user.id}" />
+        <td th:text="${user.nombre}" />
+        <td th:text="${user.apellido}" />
 
-        <td><a th:href="@{/user/borrar/} + ${formulario.id}" th:text="'Eliminar'"></a></td>
-        <!--<td><a href="/update">Modificar</a></td>-->
-        <td><a th:href="@{/user/modificar/} + ${formulario.id}" th:text="'update'"></a></td>
+        <td><a th:href="@{/user/borrar/} + ${user.id}"  th:text="'Eliminar'"></a></td>
+        <td><a th:href="@{/user/modificar/} + ${user.id}" th:text="'update'"></a></td>
+        <td><a th:href="@{/user/detalles/} + ${user.id}" th:text="'Detalles'"></a></td>
+
 
     </tr>
 

@@ -12,88 +12,107 @@ public class FormularioController {
 
     private static final Logger log =  LoggerFactory.getLogger(FormularioController.class);
 
+    Integer IdUserModificar;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ServiciosAcciones acc;
+
+    //creo un usuario nuevo
     @GetMapping("/formulario")
     public String greetingForm(Model model) {
-        model.addAttribute("form", new Formulario());
-
+        model.addAttribute("form", new FormularioUsuario());
         return "formulario";
     }
 
+    //introduzco todos los valores del nuevo usuario y las guardo en la bbdd
     @PostMapping("/formulario")
-    public String greetingSubmit(@ModelAttribute Formulario form, Model model) {
-        model.addAttribute("Formulario", form);
+    public String greetingSubmit(@ModelAttribute FormularioUsuario form, Model model) {
+        model.addAttribute("FormularioUsuario", form);
         log.info("Usuario: --> " + form.getApellido() + form.getNombre() + form.getId());
-        Formulario formul = new Formulario();
+       /* FormularioUsuario formul = new FormularioUsuario();
         formul.setNombre(form.getNombre());
-        formul.setApellido(form.getApellido());
-        userRepository.save(formul);
+        formul.setApellido(form.getApellido());*/
+        userRepository.save(acc.altaUsuario(form));
         model.addAttribute("listaUsers", userRepository.findAll());
-        return "info";
+        return "/enlacesInfoVolver";
     }
 
-    @GetMapping(path="/usuario/all")
-    public @ResponseBody Iterable<Formulario> getAllUsers() {
-        return userRepository.findAll();
+    /*-------------------------------------------------------------------------------------*/
+
+    @GetMapping("/mostrarDatos")
+    public String datosTodosUsuarios(Model model) {
+        model.addAttribute("listaUsers", userRepository.findAll());
+        return "/info";
     }
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /*@GetMapping(path="/usuario/all")
+    public @ResponseBody Iterable<FormularioUsuario> getAllUsers() {
+        return userRepository.findAll();
+    }*/
 
 
     //eliminar un usuario
     @GetMapping("user/borrar/{id}")
     public @ResponseBody String deleteUser (@PathVariable("id") Integer id) {
-        //Formulario form  = userRepository.findAllById(id);
+        //FormularioUsuario form  = userRepository.findAllById(id);
         //model.addAttribute("borrarEl", userRepository.findById(id));
         userRepository.deleteById(id);
         log.info("Invocado eliminar usuario con id"+id);
 
-        //return "<a href=\"/info\">VOLVER</a>";
-        return "Usuario Eliminado";
+        return "usuarioeliminado";
     }
 
-    /*@GetMapping(path="/user/modificar")
-    public @ResponseBody String updateUser(){
-
-     /* Formulario form = userRepository.findAllById(id);
-      model.addAttribute("UserUpdate", form);
-
-      formu.setId(form.getId());
-      formu.setNombre(form.getNombre());
-      formu.setApellido(form.getApellido());
-      userRepository.save(formu);
-
-      return "modificaruser";
-    }*/
-
-    @GetMapping("/update")
+    /*@GetMapping("/update")
     public String update() {
 
         return "update";
-    }
+    }*/
 
     @GetMapping("/user/modificar/{id}")
-    public String userGetUpdate(Model modelo) {
-        modelo.addAttribute("userUpdateGET", new Formulario());
+    public String userGetUpdate(Model modelo, @PathVariable("id") Integer id) {
+        FormularioUsuario form = new FormularioUsuario();
+        form.setId(id);
+        modelo.addAttribute("userUpdateGET", form);
+        modelo.addAttribute("id", id);
        // log.info("UsuarioUpdate: --> " + form.getId() + form.getApellido() + form.getNombre());
+        log.info("GET ACTUALIZAR --> " +  id);
+        IdUserModificar = id;
         log.info("Estoy en el metodo GET ");
-        return "update";
+        return "/update";
     }
 
 
-    @PostMapping("/user/modificar/{id}")
-    public String userPostUpdate(@ModelAttribute Formulario form,Model modelo) {
-        //Formulario form = new Formulario();
-        log.info("Estoy en el metodo POST");
-        modelo.addAttribute("userUpdatePOST", form);
-        log.info("UsuarioUpdatePOST: --> " + form.getId() + form.getApellido() + form.getNombre());
-        Formulario userUpdate = userRepository.findAllById(form.getId());
-        userUpdate.setNombre(form.getNombre());
-        userUpdate.setApellido(form.getApellido());
-        userRepository.save(userUpdate);
+    @PostMapping("/user/modificar")
+    public String userPostUpdate(@ModelAttribute FormularioUsuario form, Model modelo) {
+        //FormularioUsuario form = new FormularioUsuario();
+        modelo.addAttribute("userUpdatePUT", form);
+        log.info("Estoy en el metodo PUT");
+        form.setId(IdUserModificar);
+        log.info("UsuarioUpdatePUT: --> " + form.getId() + form.getApellido() + form.getNombre());
+        FormularioUsuario userUpdate = acc.detallesUsuario(form.getId());
+        //FormularioUsuario userUpdate = userRepository.findById(form.getId()).get();
+        log.info("usuario que se quiere actualizar --> " + userUpdate.getNombre() + userUpdate.getApellido() + userUpdate.getId());
+        /*userUpdate.setNombre(form.getNombre());
+        userUpdate.setApellido(form.getApellido());*/
+        userRepository.save(acc.editarUsuario(form, userUpdate));//userUpdate
 
-        return "User Modificado";
+        //return "redirect:/info";
+        return "/enlacesInfoVolver";
     }
+
+    //detalles de un usuario
+    @GetMapping("/user/detalles/{id}")
+    public String detalleUser(@PathVariable("id") Integer id, Model mode){
+        mode.addAttribute("datosUser", userRepository.findAllById(id));
+
+        return "detalleUser";
+    }
+
 
 
 
